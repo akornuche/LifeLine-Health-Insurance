@@ -1,3 +1,9 @@
+
+
+import './assets/style.css';   // <-- your custom styles
 import { createApp } from 'vue';
 import App from './App.vue';
-createApp(App).mount('#app');
+import router from './router'; // if using Vue Router
+
+
+createApp(App).use(router).mount('#app');

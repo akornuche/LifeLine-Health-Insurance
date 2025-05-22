@@ -1,5 +1,19 @@
 /* Lifeline Home Page Styles */
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>LifeLine - Affordable & Accessible Healthcare</title>
+  <link rel="stylesheet" href="client/public/style.css">
+</head>
+<body>
+  <div id="app"></div>
+  <script type="module" src="src/main.js"></script>
+</body>
+</html>
+
 body {
   margin: 0;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
