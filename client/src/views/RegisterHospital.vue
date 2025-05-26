@@ -1,18 +1,18 @@
 <template>
-  <div>
-    <h2>Hospital Page</h2>
-    <!-- Content for RegisterHospital.vue goes here -->
-  </div>
+  <section class="form-section">
+    <h2><i class="fas fa-hospital"></i> Hospital Registration</h2>
+    <form>
+      <input type="text" placeholder="Hospital Name" required />
+      <input type="email" placeholder="Email" required />
+      <input type="text" placeholder="License Number" required />
+      <input type="password" placeholder="Password" required />
+      <button type="submit">Register</button>
+    </form>
+  </section>
 </template>
 
 <script>
 export default {
-  name: 'RegisterHospital'
-}
+  name: 'HospitalRegistration'
+};
 </script>
-
-<style scoped>
-h2 {
-  color: #0066b3;
-}
-</style>

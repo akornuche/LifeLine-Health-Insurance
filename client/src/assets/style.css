@@ -369,3 +369,38 @@ ul.nav-links{
   border-radius: 5px;
 }
 
+.form-section {
+  max-width: 400px;
+  margin: 5rem auto;
+  background-color: white;
+  padding: 2rem;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  text-align: center;
+}
+
+.form-section h2 {
+  margin-bottom: 1.5rem;
+  color: #0066B3;
+}
+
+form input, form button {
+  width: 100%;
+  padding: 0.75rem;
+  margin: 0.5rem 0;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+}
+
+form button {
+  background-color: #0066B3;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+form button:hover {
+  background-color: #00539e;
+}
+

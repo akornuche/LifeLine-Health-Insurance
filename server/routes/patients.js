@@ -1,9 +1,11 @@
-// server/routes/patients.js
 const express = require('express');
 const router = express.Router();
 const fs = require('fs');
 const path = require('path');
+const bcrypt = require('bcrypt');
+
 const filePath = path.join(__dirname, '../data/patients.json');
+const saltRounds = 10;
 
 // Utility to read/write JSON
 function readJSON(file) {
@@ -17,14 +19,17 @@ function writeJSON(file, data) {
 // Get all patients
 router.get('/', (req, res) => {
   const patients = readJSON(filePath);
-  res.json(patients);
+  res.json(patients.map(p => {
+    const { password, ...rest } = p; // Hide passwords
+    return rest;
+  }));
 });
 
 // Register new patient
-router.post('/', (req, res) => {
-  const { name, email, payment, dependents = [], location } = req.body;
+router.post('/', async (req, res) => {
+  const { name, email, password, payment, dependents = [], location } = req.body;
 
-  if (!name || !email || !location) {
+  if (!name || !email || !password || !location) {
     return res.status(400).json({ error: 'Missing required fields.' });
   }
 
@@ -38,22 +43,36 @@ router.post('/', (req, res) => {
 
   const patients = readJSON(filePath);
 
+  // Check if email already exists
+  const existing = patients.find(p => p.email === email);
+  if (existing) {
+    return res.status(409).json({ error: 'Email already registered.' });
+  }
+
+  // Hash the password
+  const hashedPassword = await bcrypt.hash(password, saltRounds);
+
   const newPatient = {
     id: Date.now(),
     name,
     email,
+    password: hashedPassword,
     payment,
     location, // { lat, lng }
     dependents,
     assignedDoctorId: null,
     assignedPharmacyId: null,
-    assignedHospitalId: null
+    assignedHospitalId: null,
+    role: 'patient'
   };
 
   patients.push(newPatient);
   writeJSON(filePath, patients);
 
-  res.status(201).json(newPatient);
+  // Hide password in response
+  const { password: _, ...userData } = newPatient;
+
+  res.status(201).json(userData);
 });
 
 module.exports = router;

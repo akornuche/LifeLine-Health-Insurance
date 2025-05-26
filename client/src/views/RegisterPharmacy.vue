@@ -1,18 +1,18 @@
 <template>
-  <div>
-    <h2>Pharmacy Page</h2>
-    <!-- Content for RegisterPharmacy.vue goes here -->
-  </div>
+  <section class="form-section">
+    <h2><i class="fas fa-prescription-bottle-alt"></i> Pharmacy Registration</h2>
+    <form>
+      <input type="text" placeholder="Pharmacy Name" required />
+      <input type="email" placeholder="Email" required />
+      <input type="text" placeholder="License Number" required />
+      <input type="password" placeholder="Password" required />
+      <button type="submit">Register</button>
+    </form>
+  </section>
 </template>
 
 <script>
 export default {
-  name: 'RegisterPharmacy'
-}
+  name: 'PharmacyRegistration'
+};
 </script>
-
-<style scoped>
-h2 {
-  color: #0066b3;
-}
-</style>

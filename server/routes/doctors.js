@@ -1,9 +1,11 @@
-// server/routes/doctors.js
 const express = require('express');
 const router = express.Router();
 const fs = require('fs');
 const path = require('path');
+const bcrypt = require('bcrypt');
+
 const filePath = path.join(__dirname, '../data/doctors.json');
+const saltRounds = 10;
 
 function readJSON(file) {
   if (!fs.existsSync(file)) return [];
@@ -13,33 +15,48 @@ function writeJSON(file, data) {
   fs.writeFileSync(file, JSON.stringify(data, null, 2));
 }
 
-// Get all doctors
+// Get all doctors (without passwords)
 router.get('/', (req, res) => {
   const doctors = readJSON(filePath);
-  res.json(doctors);
+  res.json(doctors.map(d => {
+    const { password, ...rest } = d;
+    return rest;
+  }));
 });
 
-// Register doctor
-router.post('/', (req, res) => {
-  const { name, email, license, location } = req.body;
+// Register new doctor
+router.post('/', async (req, res) => {
+  const { name, email, password, licenseNumber, specialization, location } = req.body;
 
-  if (!name || !email || !license || !location) {
-    return res.status(400).json({ error: 'All fields are required.' });
+  if (!name || !email || !password || !licenseNumber || !location) {
+    return res.status(400).json({ error: 'Missing required fields.' });
   }
 
   const doctors = readJSON(filePath);
+  const existing = doctors.find(d => d.email === email);
+  if (existing) {
+    return res.status(409).json({ error: 'Email already registered.' });
+  }
+
+  const hashedPassword = await bcrypt.hash(password, saltRounds);
+
   const newDoctor = {
     id: Date.now(),
     name,
     email,
-    license,
-    location
+    password: hashedPassword,
+    licenseNumber,
+    specialization,
+    location,
+    role: 'doctor'
   };
 
   doctors.push(newDoctor);
   writeJSON(filePath, doctors);
 
-  res.status(201).json(newDoctor);
+  const { password: _, ...responseData } = newDoctor;
+  res.status(201).json(responseData);
 });
+
 
 module.exports = router;

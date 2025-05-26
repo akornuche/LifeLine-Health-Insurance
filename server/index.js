@@ -1,20 +1,26 @@
 const express = require('express');
-const fs = require('fs');
 const cors = require('cors');
+const fs = require('fs');
 const app = express();
 
-app.use(cors());
+// Middleware
+app.use(cors({
+  origin: 'http://localhost:5173', // Or your frontend port
+  credentials: true
+}));
 app.use(express.json());
 
-// Register routes
-app.use('/api/patients', require('./routes/patients'));
-app.use('/api/doctors', require('./routes/doctors'));
-app.use('/api/pharmacies', require('./routes/pharmacies'));
-app.use('/api/hospitals', require('./routes/hospitals'));
-app.use('/api/records', require('./routes/records'));
+
+// Routes
+const loginRouter = require('./routes/login');
+const patients = require('./routes/patients');
+const doctors = require('./routes/doctors');
+const pharmacies = require('./routes/pharmacies');
+const hospitals = require('./routes/hospitals');
+const records = require('./routes/records');
 const admin = require('./routes/admin');
 
-const patients = require('./routes/patients');
+app.use('/login', loginRouter);
 app.use('/api/patients', patients);
 app.use('/api/doctors', doctors);
 app.use('/api/pharmacies', pharmacies);
@@ -22,5 +28,6 @@ app.use('/api/hospitals', hospitals);
 app.use('/api/records', records);
 app.use('/api/admin', admin);
 
+// Start server
 const PORT = 3000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
