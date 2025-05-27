@@ -20,6 +20,7 @@
           <option value="doctor">Doctor</option>
           <option value="pharmacy">Pharmacy</option>
           <option value="hospital">Hospital</option>
+          <option value="admin">Admin</option> <!-- Add if admin login uses same page -->
         </select>
       </div>
 
@@ -42,42 +43,52 @@ export default {
       error: ''
     };
   },
-  
+
   methods: {
-  async login() {
-    try {
-      const res = await axios.post('http://localhost:3000/login', {
-        email: this.email,
-        password: this.password
-      });
+    async login() {
+      this.error = '';
 
-      const user = res.data.user; // Get the actual user object
-localStorage.setItem('userType', user.role);
-localStorage.setItem('userEmail', user.email); // or whatever ID you use
+      if (!this.userType) {
+        this.error = 'Please select a user type.';
+        return;
+      }
 
-if (!this.userType) {
-  this.error = 'Please select a user type.';
-  return;
-}
+      try {
+        const res = await axios.post('http://localhost:3000/api/login', {
+          email: this.email,
+          password: this.password,
+          userType: this.userType
+        });
 
-if (user.role !== this.userType) {
-  this.error = 'Selected user type does not match account type.';
-  return;
-}
+        const user = res.data.user;
 
-if (user.role === 'patient') this.$router.push('/dashboard/patient');
-else if (user.role === 'doctor') this.$router.push('/dashboard/doctor');
-else if (user.role === 'pharmacy') this.$router.push('/dashboard/pharmacy');
-else if (user.role === 'hospital') this.$router.push('/dashboard/hospital');
-else if (user.role === 'admin') this.$router.push('/dashboard/admin');
-} catch (err) {
-      alert('Login failed');
+        if (user.role !== this.userType) {
+          this.error = 'Selected user type does not match account type.';
+          return;
+        }
+
+        localStorage.setItem('userType', user.role);
+        localStorage.setItem('userEmail', user.email);
+
+        // Redirect based on role
+        const dashboardMap = {
+          patient: '/dashboard/patient',
+          doctor: '/dashboard/doctor',
+          pharmacy: '/dashboard/pharmacy',
+          hospital: '/dashboard/hospital',
+          admin: '/dashboard/admin'
+        };
+
+        this.$router.push(dashboardMap[user.role] || '/dashboard');
+
+      } catch (err) {
+        const msg = err.response?.data?.error || 'Login failed. Please check your credentials.';
+        this.error = msg;
+        console.error('Login error:', err);
+      }
     }
   }
-}
-
 };
-
 </script>
 
 <style scoped>

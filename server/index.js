@@ -10,9 +10,14 @@ app.use(cors({
 }));
 app.use(express.json());
 
+app.use((req, res, next) => {
+  console.log(`[${new Date().toISOString()}] ${req.method} ${req.url}`);
+  console.log('Body:', req.body);
+  next();
+});
 
 // Routes
-const loginRouter = require('./routes/login');
+const login = require('./routes/login');
 const patients = require('./routes/patients');
 const doctors = require('./routes/doctors');
 const pharmacies = require('./routes/pharmacies');
@@ -20,13 +25,17 @@ const hospitals = require('./routes/hospitals');
 const records = require('./routes/records');
 const admin = require('./routes/admin');
 
-app.use('/login', loginRouter);
+app.use('/api/login', login);
 app.use('/api/patients', patients);
 app.use('/api/doctors', doctors);
 app.use('/api/pharmacies', pharmacies);
 app.use('/api/hospitals', hospitals);
 app.use('/api/records', records);
 app.use('/api/admin', admin);
+
+app.get('/ping', (req, res) => {
+  res.send('Server is alive');
+});
 
 // Start server
 const PORT = 3000;

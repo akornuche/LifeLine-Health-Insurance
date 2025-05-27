@@ -14,5 +14,21 @@
     "assignedPharmacyId": null,
     "assignedHospitalId": null,
     "role": "patient"
+  },
+  {
+    "id": 1748253001457,
+    "name": "Akor Akazue",
+    "email": "a3isalink1@gmail.com",
+    "password": "$2b$10$1RNaMMvrALCwn1jSyDFo..qkI.dHmRXx1ye31HyMkBJPl.LVa5Khi",
+    "payment": 1500,
+    "location": {
+      "lat": 23456,
+      "lng": 23456
+    },
+    "dependents": [],
+    "assignedDoctorId": null,
+    "assignedPharmacyId": null,
+    "assignedHospitalId": null,
+    "role": "patient"
   }
 ]

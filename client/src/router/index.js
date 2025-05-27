@@ -1,3 +1,4 @@
+
 import { createRouter, createWebHistory } from 'vue-router';
 
 // Main views
@@ -10,11 +11,11 @@ import Login from '../views/Login.vue';
 import AdminLogin from '../views/AdminLogin.vue';
 
 // Dashboard views
-import PatientDashboard from '../views/dashboard/PatientDashboard.vue';
-import DoctorDashboard from '../views/dashboard/DoctorDashboard.vue';
-import PharmacyDashboard from '../views/dashboard/PharmacyDashboard.vue';
-import HospitalDashboard from '../views/dashboard/HospitalDashboard.vue';
-import AdminDashboard from '../views/dashboard/AdminDashboard.vue';
+import PatientDashboard from '../views/dashboards/PatientDashboard.vue';
+import DoctorDashboard from '../views/dashboards/DoctorDashboard.vue';
+import PharmacyDashboard from '../views/dashboards/PharmacyDashboard.vue';
+import HospitalDashboard from '../views/dashboards/HospitalDashboard.vue';
+import AdminDashboard from '../views/dashboards/AdminDashboard.vue';
 
 const routes = [
   // Main public pages
