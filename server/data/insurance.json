@@ -1,0 +1,34 @@
+[
+  {
+    "id": 1,
+    "userId": 1,
+    "policyNumber": "HS1234567",
+    "provider": "HealthSecure",
+    "coverage": "Full",
+    "expiry": "2026-12-31"
+  },
+  {
+    "id": 2,
+    "userId": 3,
+    "policyNumber": "ABC987654",
+    "provider": "MediCare",
+    "coverage": "Partial",
+    "expiry": "2024-11-30"
+  },
+  {
+    "id": 3,
+    "userId": 2,
+    "policyNumber": "DOC456789",
+    "provider": "DoctorHealth",
+    "coverage": "N/A",
+    "expiry": "N/A"
+  },
+  {
+    "id": 4,
+    "userId": 4,
+    "policyNumber": "PHAR123456",
+    "provider": "PharmaLife",
+    "coverage": "N/A",
+    "expiry": "N/A"
+  }
+]

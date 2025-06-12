@@ -1,0 +1,38 @@
+[
+  {
+    "id": 1,
+    "userId": 1, 
+    "email": "a3isalink@gmail.com",
+    "amount": 120.00,
+    "date": "2025-05-01T12:00:00Z",
+    "status": "paid",
+    "method": "credit_card"
+  },
+  {
+    "id": 2,
+    "userId": 3,
+    "email": "a3isalink2@gmail.com",
+    "amount": 120.00,
+    "date": "2024-01-01T12:00:00Z",
+    "status": "unpaid",
+    "method": "paypal"
+  },
+  {
+    "id": 3,
+    "userId": 1,
+    "email": "a3isalink1@gmail.com",
+    "amount": 130.00,
+    "date": "2024-06-01T12:00:00Z",
+    "status": "paid",
+    "method": "credit_card"
+  },
+  {
+    "id": 4,
+    "userId": 3,
+    "amount": 110.00,
+    "email": "a3isalink4@gmail.com",
+    "date": "2023-06-01T12:00:00Z",
+    "status": "paid",
+    "method": "bank_transfer"
+  }
+]

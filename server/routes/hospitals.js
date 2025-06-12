@@ -24,38 +24,41 @@ router.get('/', (req, res) => {
   }));
 });
 
-// Register new doctor
+// Register new hospital
 router.post('/', async (req, res) => {
-  const { name, email, password, licenseNumber, specialization, location } = req.body;
+  const { name, email, password, licenseNumber, phone, location } = req.body;
 
-  if (!name || !email || !password || !licenseNumber || !location) {
+  if (!name || !email || !password || !licenseNumber || phone || !location) {
     return res.status(400).json({ error: 'Missing required fields.' });
   }
 
   const hospitals = readJSON(filePath);
-  const existing = hospitals.find(d => d.email === email);
+  const existing = hospitals.find(h => h.email === email);
   if (existing) {
     return res.status(409).json({ error: 'Email already registered.' });
   }
 
   const hashedPassword = await bcrypt.hash(password, saltRounds);
 
-  const newDoctor = {
-    id: Date.now(),
+  const maxId = hospitals.length > 0 ? Math.max(...hospitals.map(h => h.id)) : 0;
+
+  const newHospital = {
+    id: maxId + 1,
     name,
     email,
-    password: hashedPassword,
+    phone,    
     licenseNumber,
-    specialization,
+    password: hashedPassword,
     location,
-    role: 'doctor'
+    role: 'hospital'
   };
 
-  hospitals.push(newDoctor);
+  hospitals.push(newHospital);
   writeJSON(filePath, hospitals);
 
-  const { password: _, ...responseData } = newDoctor;
+  const { password: _, ...responseData } = newHospital;
   res.status(201).json(responseData);
 });
+
 
 module.exports = router;

@@ -1,0 +1,85 @@
+[
+  {
+    "id": 5,
+    "name": "try this",
+    "email": "a3isalink@gmail.com",
+    "password": "$2b$10$qj04DIi75a6pWAk2Yd3eCeNv//xgjmUDy54Ie..Qgj5fZUYx3GEqW",
+    "location": {
+      "lat": 6.1329419,
+      "lng": 6.7923994
+    },
+    "role": "pharmacy"
+  },
+  {
+    "id": 1,
+    "name": "HealthPlus Pharmacy",
+    "address": "123 Main St",
+    "phone": "111-222-3333",
+    "password": "$2b$10$qj04DIi75a6pWAk2Yd3eCeNv//xgjmUDy54Ie..Qgj5fZUYx3GEqW",
+    "location": {
+      "lat": 6.1329419,
+      "lng": 6.7923994
+    },
+    "role": "pharmacy"
+  },
+  {
+    "id": 2,
+    "name": "WellCare Pharmacy",
+    "address": "456 Elm St",
+    "phone": "444-555-6666",
+    "password": "$2b$10$qj04DIi75a6pWAk2Yd3eCeNv//xgjmUDy54Ie..Qgj5fZUYx3GEqW",
+    "location": {
+      "lat": 6.1329419,
+      "lng": 6.7923994
+    },
+    "role": "pharmacy"
+  },
+  {
+    "id": 3,
+    "name": "CityMed Pharmacy",
+    "address": "789 Oak St",
+    "phone": "777-888-9999",
+    "password": "$2b$10$qj04DIi75a6pWAk2Yd3eCeNv//xgjmUDy54Ie..Qgj5fZUYx3GEqW",
+    "location": {
+      "lat": 6.1329419,
+      "lng": 6.7923994
+    },
+    "role": "pharmacy"
+  },
+  {
+    "id": 4,
+    "name": "Family Pharmacy",
+    "address": "321 Pine St",
+    "phone": "222-333-4444",
+    "password": "$2b$10$qj04DIi75a6pWAk2Yd3eCeNv//xgjmUDy54Ie..Qgj5fZUYx3GEqW",
+    "location": {
+      "lat": 6.1329419,
+      "lng": 6.7923994
+    },
+    "role": "pharmacy"
+  },
+  {
+    "id": 6,
+    "name": "family pharm",
+    "email": "a3isalink3@gmail.com",
+    "licenseNumber": "4567kijuhytmn",
+    "password": "$2b$10$48cshMGZodYlqgYHXL3vseBaMnCSTUZfRHPxTlvBm8.GXQzzyYPgW",
+    "location": {
+      "lat": 6.1329419,
+      "lng": 6.7923994
+    },
+    "role": "pharmacy"
+  },
+  {
+    "id": 7,
+    "name": "home pharm",
+    "email": "a3isalink4@gmail.com",
+    "licenseNumber": "3456iuyt",
+    "password": "$2b$10$hyY/aqm78nK0PBv/5pqg8O8oxKHXW48.JzTuLHYdpQCAksTial28.",
+    "location": {
+      "lat": 6.1329419,
+      "lng": 6.7923994
+    },
+    "role": "pharmacy"
+  }
+]

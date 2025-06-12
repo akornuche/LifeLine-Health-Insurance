@@ -1,0 +1,96 @@
+[
+  {
+    "id": 1,
+    "name": "Akor Akazue",
+    "email": "a3isalink@gmail.com",
+    "gender": "male",
+    "photoUrl": "" ,
+    "phone": "123-456-7890",
+    "specialization": "General Practitioner",
+    "password": "$2b$10$P9JMkbZWaMVyF9myjjM2N.UPden03U0NXn9AwBm2Ro/DH9v91sIvC",
+    "licenseNumber": "34567dfghbnj",
+    "location": {
+      "lat": 6.1329419,
+      "lng": 6.7923994
+    },
+    "role": "doctor"
+  },
+  {
+    "id": 2,
+    "name": "Dr. Jane Smith",
+    "specialization": "General Practitioner",
+    "email": "jane.smith@clinic.com",
+    "gender": "female",
+    "photoUrl": "" ,
+    "phone": "123-456-7890",
+    "password": "$2b$10$P9JMkbZWaMVyF9myjjM2N.UPden03U0NXn9AwBm2Ro/DH9v91sIvC",
+    "licenseNumber": "34567dfghbnj",
+    "location": {
+      "lat": 6.1329419,
+      "lng": 6.7923994
+    },
+    "role": "doctor"
+  },
+  {
+    "id": 3,
+    "name": "Dr. Alan Watts",
+    "specialization": "Pediatrics",
+    "email": "alan.watts@hospital.com",
+    "gender": "male",
+    "photoUrl": "" ,
+    "phone": "987-654-3210",
+    "password": "$2b$10$P9JMkbZWaMVyF9myjjM2N.UPden03U0NXn9AwBm2Ro/DH9v91sIvC",
+    "licenseNumber": "34567dfghbnj",
+    "location": {
+      "lat": 6.1329419,
+      "lng": 6.7923994
+    },
+    "role": "doctor"
+  },
+  {
+    "id": 4,
+    "name": "Dr. Maria Lopez",
+    "specialization": "Cardiology",
+    "email": "maria.lopez@healthcare.com",
+    "gender": "female",
+    "photoUrl": "" ,
+    "phone": "555-123-4567",
+    "password": "$2b$10$P9JMkbZWaMVyF9myjjM2N.UPden03U0NXn9AwBm2Ro/DH9v91sIvC",
+    "licenseNumber": "34567dfghbnj",
+    "location": {
+      "lat": 6.1329419,
+      "lng": 6.7923994
+    },
+    "role": "doctor"
+  },
+  {
+    "id": 5,
+    "name": "Dr. Lee Wong",
+    "specialization": "Dermatology",
+    "email": "lee.wong@clinic.com",
+    "gender": "male",
+    "photoUrl": "" ,
+    "phone": "444-555-6666",
+    "password": "$2b$10$P9JMkbZWaMVyF9myjjM2N.UPden03U0NXn9AwBm2Ro/DH9v91sIvC",
+    "licenseNumber": "34567dfghbnj",
+    "location": {
+      "lat": 6.1329419,
+      "lng": 6.7923994
+    },
+    "role": "doctor"
+  },
+  {
+    "id": 6,
+    "name": "Akor Akazue",
+    "email": "a3isalink3@gmail.com",
+    "gender": "female",
+    "photoUrl": "" ,
+    "password": "$2b$10$JjNzMvWenneHGbSyAin8Z.NAwcvsWwtpa8DCovSF8WSZ/iF0il2QW",
+    "licenseNumber": "3456kjhgf",
+    "location": {
+      "lat": 6.1329419,
+      "lng": 6.7923994
+    },
+    "role": "doctor"
+  }
+]

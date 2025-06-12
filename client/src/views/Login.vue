@@ -62,15 +62,42 @@ export default {
 
         const user = res.data.user;
 
-        if (user.role !== this.userType) {
+        // Case-insensitive comparison
+        const selectedRole = this.userType.toLowerCase();
+        const actualRole = user.role.toLowerCase();
+
+        if (actualRole !== selectedRole) {
           this.error = 'Selected user type does not match account type.';
           return;
         }
 
-        localStorage.setItem('userType', user.role);
-        localStorage.setItem('userEmail', user.email);
+        // ✅ Store login data in localStorage
+        localStorage.setItem('user', JSON.stringify(user));
+        localStorage.setItem('userType', user.role);  // for dashboard redirect
+        localStorage.setItem('userRole', user.role);  // for route guard
 
-        // Redirect based on role
+        // ✅ Store patientId if user is patient
+        if (user.role === 'patient') {
+          localStorage.setItem('patientId', user.id);
+        }
+
+        console.log('Logged in user:', user);
+
+        // 🚨 Redirect unpaid patients to payment
+        if (user.role === 'patient') {
+          const isPaid = user.paymentStatus === 'paid';
+          const isValid = user.paymentExpires ? new Date(user.paymentExpires) > new Date() : false;
+
+          if (!isPaid || !isValid) {
+            this.$router.push('/payment');
+            return;
+          }
+        }
+
+        // Notify other components
+        window.dispatchEvent(new Event('user-logged-in'));
+
+        // ✅ Redirect to appropriate dashboard
         const dashboardMap = {
           patient: '/dashboard/patient',
           doctor: '/dashboard/doctor',
@@ -79,8 +106,7 @@ export default {
           admin: '/dashboard/admin'
         };
 
-        this.$router.push(dashboardMap[user.role] || '/dashboard');
-
+        this.$router.push(dashboardMap[actualRole] || '/dashboard');
       } catch (err) {
         const msg = err.response?.data?.error || 'Login failed. Please check your credentials.';
         this.error = msg;
@@ -90,6 +116,9 @@ export default {
   }
 };
 </script>
+
+
+
 
 <style scoped>
 .login-container {

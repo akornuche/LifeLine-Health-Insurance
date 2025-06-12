@@ -1,34 +1,39 @@
 [
   {
-    "id": 1748028150626,
-    "name": "Akor ",
+    "id": 1,
+    "name": "Akor Akazue",
     "email": "a3isalink@gmail.com",
-    "password": "$2b$10$q7ilVCicMY2Gg4Wk1qWEAu21YBy8szmzQvW/tIhAw9GQQ55GbpBVa",
-    "payment": 1500,
+    "gender": "male",
+    "photoUrl": "https://randomuser.me/api/portraits/men/44.jpg" ,
+    "password": "$2b$10$0E.dFTa0lyDQCHn1lYf.ZuhWRO2pe79RkdHG2wxX5k8ioTi3SV8Wa",
     "location": {
-      "lat": 3456,
-      "lng": 7654
+      "lat": 6.1329419,
+      "lng": 6.7923994
     },
-    "dependents": [],
-    "assignedDoctorId": null,
-    "assignedPharmacyId": null,
-    "assignedHospitalId": null,
-    "role": "patient"
+    "assignedDoctorId": 4,
+    "assignedPharmacyId": 4,
+    "assignedHospitalId": 4,
+    "role": "patient",
+    "paymentStatus": "paid",
+    "paymentExpires": "2026-05-31T20:51:11.870Z"
   },
   {
-    "id": 1748253001457,
-    "name": "Akor Akazue",
-    "email": "a3isalink1@gmail.com",
-    "password": "$2b$10$1RNaMMvrALCwn1jSyDFo..qkI.dHmRXx1ye31HyMkBJPl.LVa5Khi",
-    "payment": 1500,
+    "id": 2,
+    "name": "Akornuche",
+    "email": "a3isalink4@gmail.com",
+    "gender": "female",
+    "photoUrl": "https://randomuser.me/api/portraits/women/44.jpg" ,
+    "password": "$2b$10$IpNDBXRyH.841Oh0tLbfwOrP2XbT3UWDYSqoCL7HWfRxwMCQIYpW2",
     "location": {
-      "lat": 23456,
-      "lng": 23456
+      "lat": 6.1329419,
+      "lng": 6.7923994
     },
     "dependents": [],
     "assignedDoctorId": null,
     "assignedPharmacyId": null,
     "assignedHospitalId": null,
-    "role": "patient"
+    "role": "patient",
+    "paymentStatus": "paid",
+    "paymentExpires": "2026-06-04T14:45:27.467Z"
   }
 ]

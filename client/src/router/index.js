@@ -7,8 +7,10 @@ import RegisterPatient from '../views/RegisterPatient.vue';
 import RegisterDoctor from '../views/RegisterDoctor.vue';
 import RegisterHospital from '../views/RegisterHospital.vue';
 import RegisterPharmacy from '../views/RegisterPharmacy.vue';
-import Login from '../views/Login.vue';
+import Login from '../views/login.vue';
 import AdminLogin from '../views/AdminLogin.vue';
+import MakePayment from '../views/MakePayment.vue';
+import DependentsPage from '@/views/DependentsPage.vue';
 
 // Dashboard views
 import PatientDashboard from '../views/dashboards/PatientDashboard.vue';
@@ -16,6 +18,7 @@ import DoctorDashboard from '../views/dashboards/DoctorDashboard.vue';
 import PharmacyDashboard from '../views/dashboards/PharmacyDashboard.vue';
 import HospitalDashboard from '../views/dashboards/HospitalDashboard.vue';
 import AdminDashboard from '../views/dashboards/AdminDashboard.vue';
+import UpgradeCover from '../views/UpgradeCover.vue';
 
 const routes = [
   // Main public pages
@@ -41,6 +44,19 @@ const routes = [
       }
     }
   },
+ 
+
+{
+  path: '/dashboard/patient/dependents',
+  name: 'Dependents',
+  component: DependentsPage
+},
+
+{
+    path: '/dashboard/patient/upgrade-cover',
+    name: 'UpgradeCover',
+    component: () => import('../views/UpgradeCover.vue')
+  },
 
   // Dashboard routes
   { path: '/dashboard/patient', name: 'PatientDashboard', component: PatientDashboard },
@@ -48,11 +64,26 @@ const routes = [
   { path: '/dashboard/pharmacy', name: 'PharmacyDashboard', component: PharmacyDashboard },
   { path: '/dashboard/hospital', name: 'HospitalDashboard', component: HospitalDashboard },
   { path: '/dashboard/admin', name: 'AdminDashboard', component: AdminDashboard },
+  { path: '/payment', name: 'Payment', component: MakePayment },
 ];
 
 const router = createRouter({
   history: createWebHistory(),
   routes,
 });
+
+router.beforeEach((to, from, next) => {
+  const publicPages = ['/', '/login', '/admin/login', '/register/patient', '/register/doctor', '/register/hospital', '/register/pharmacy'];
+  const isPublic = publicPages.includes(to.path);
+  const isLoggedIn = !!localStorage.getItem('userRole');
+
+  if (!isPublic && !isLoggedIn) {
+    next('/'); // redirect to Home if not logged in
+  } else {
+    next(); // allow navigation
+  }
+});
+
+
 
 export default router;

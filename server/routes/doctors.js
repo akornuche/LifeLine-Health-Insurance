@@ -26,9 +26,9 @@ router.get('/', (req, res) => {
 
 // Register new doctor
 router.post('/', async (req, res) => {
-  const { name, email, password, licenseNumber, specialization, location } = req.body;
+  const { name, email, phone, password, licenseNumber, specialization, location } = req.body;
 
-  if (!name || !email || !password || !licenseNumber || !location) {
+  if (!name || !email || !phone || !password || !licenseNumber || !location) {
     return res.status(400).json({ error: 'Missing required fields.' });
   }
 
@@ -40,10 +40,14 @@ router.post('/', async (req, res) => {
 
   const hashedPassword = await bcrypt.hash(password, saltRounds);
 
+  const maxId = doctors.length > 0 ? Math.max(...doctors.map(h => h.id)) : 0;
+
+
   const newDoctor = {
-    id: Date.now(),
+    id: maxId + 1,
     name,
     email,
+    phone,    
     password: hashedPassword,
     licenseNumber,
     specialization,

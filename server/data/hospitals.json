@@ -1,0 +1,85 @@
+[
+  {
+    "id": 1748565196350,
+    "name": " nfoew lkjn",
+    "email": "a3isalink@gmail.com",
+    "phone": "101-202-3030",
+    "password": "$2b$10$tTbmZcai9wmL5y2Z4dWRjuASU6LsHwqx4DEZLr24MlrJdI6L2gIwW",
+    "location": {
+      "lat": 6.1329419,
+      "lng": 6.7923994
+    },
+    "role": "hospital"
+  },
+  {
+    "id": 1,
+    "name": "City General Hospital",
+    "address": "10 Hospital Rd",
+    "phone": "101-202-3030",
+    "password": "$2b$10$tTbmZcai9wmL5y2Z4dWRjuASU6LsHwqx4DEZLr24MlrJdI6L2gIwW",
+    "location": {
+      "lat": 6.1329419,
+      "lng": 6.7923994
+    },
+    "role": "hospital"
+  },
+  {
+    "id": 2,
+    "name": "Green Valley Hospital",
+    "address": "20 Health Ave",
+    "phone": "404-505-6060",
+    "password": "$2b$10$tTbmZcai9wmL5y2Z4dWRjuASU6LsHwqx4DEZLr24MlrJdI6L2gIwW",
+    "location": {
+      "lat": 6.1329419,
+      "lng": 6.7923994
+    },
+    "role": "hospital"
+  },
+  {
+    "id": 3,
+    "name": "Sunrise Medical Center",
+    "address": "30 Wellness Blvd",
+    "phone": "707-808-9090",
+    "password": "$2b$10$tTbmZcai9wmL5y2Z4dWRjuASU6LsHwqx4DEZLr24MlrJdI6L2gIwW",
+    "location": {
+      "lat": 6.1329419,
+      "lng": 6.7923994
+    },
+    "role": "hospital"
+  },
+  {
+    "id": 4,
+    "name": "Hope Clinic",
+    "address": "40 Care St",
+    "phone": "112-233-4455",
+    "password": "$2b$10$tTbmZcai9wmL5y2Z4dWRjuASU6LsHwqx4DEZLr24MlrJdI6L2gIwW",
+    "location": {
+      "lat": 6.1329419,
+      "lng": 6.7923994
+    },
+    "role": "hospital"
+  },
+  {
+    "id": 1749039924209,
+    "name": "city clinic1",
+    "email": "homeplace@gmail.com",
+    "password": "$2b$10$92AdT0CkjU1epJIhX/GVOONou2Yedfp0fVPzuMV0ynyClApGWryHe",
+    "location": {
+      "lat": 6.1329419,
+      "lng": 6.7923994
+    },
+    "role": "hospital"
+  },
+  {
+    "id": 1749039924210,
+    "name": "home hosp",
+    "email": "a3isalink3@gmail.com",
+    "licenseNumber": "erty654",
+    "password": "$2b$10$QmDScBxz8QX3ctmnWcQoYeJ5BrexhjqLpixlssPTv3cK4zMrEBxMG",
+    "location": {
+      "lat": 6.1329419,
+      "lng": 6.7923994
+    },
+    "role": "hospital"
+  }
+]

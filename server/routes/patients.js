@@ -27,18 +27,14 @@ router.get('/', (req, res) => {
 
 // Register new patient
 router.post('/', async (req, res) => {
-  const { name, email, password, payment, dependents = [], location } = req.body;
+  const { name, email, phone, password, payment, location } = req.body;
 
-  if (!name || !email || !password || !location) {
+  if (!name || !email || !phone || !password || !location) {
     return res.status(400).json({ error: 'Missing required fields.' });
   }
 
   if (payment < 1500) {
     return res.status(400).json({ error: 'Minimum payment is ₦1500.' });
-  }
-
-  if (dependents.length > 4) {
-    return res.status(400).json({ error: 'Only up to 4 dependents allowed.' });
   }
 
   const patients = readJSON(filePath);
@@ -52,14 +48,17 @@ router.post('/', async (req, res) => {
   // Hash the password
   const hashedPassword = await bcrypt.hash(password, saltRounds);
 
+  // Find max ID and assign next one
+  const maxId = patients.length > 0 ? Math.max(...patients.map(p => p.id)) : 0;
+
   const newPatient = {
-    id: Date.now(),
+    id: maxId + 1,
     name,
     email,
+    phone,    
     password: hashedPassword,
     payment,
-    location, // { lat, lng }
-    dependents,
+    location, 
     assignedDoctorId: null,
     assignedPharmacyId: null,
     assignedHospitalId: null,
@@ -69,10 +68,9 @@ router.post('/', async (req, res) => {
   patients.push(newPatient);
   writeJSON(filePath, patients);
 
-  // Hide password in response
   const { password: _, ...userData } = newPatient;
-
   res.status(201).json(userData);
 });
+
 
 module.exports = router;

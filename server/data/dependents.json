@@ -1,0 +1,25 @@
+[
+  {
+    "id": 5,
+    "name": "emma doe",
+    "gender": "female",
+    "age": 12,
+    "relation": "niece",
+    "patientId": "6"
+  },
+  {
+    "id": 6,
+    "name": "Lucas Doe",
+    "gender": "male",
+    "age": 17,
+    "relation": "Nephew",
+    "patientId": "1"
+  },
+  {
+    "id": 7,
+    "name": "Lucy Doe",
+    "age": 13,
+    "relation": "Niece",
+    "patientId": "1"
+  }
+]

@@ -15,7 +15,7 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1rem 2rem;
+  padding: 1rem 2rem 0 2rem;
   background-color: #FFFFFF;
   box-shadow: 0 2px 4px rgba(0,0,0,0.05);
 }
@@ -367,6 +367,8 @@ ul.nav-links{
   text-decoration: none;
   font-weight: bold;
   border-radius: 5px;
+  border: none;
+  cursor: pointer;
 }
 
 .form-section {

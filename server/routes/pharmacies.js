@@ -24,37 +24,40 @@ router.get('/', (req, res) => {
   }));
 });
 
-// Register new doctor
+// Register new pharmacy
 router.post('/', async (req, res) => {
-  const { name, email, password, licenseNumber, specialization, location } = req.body;
+  const { name, email, phone, password, licenseNumber, location } = req.body;
 
-  if (!name || !email || !password || !licenseNumber || !location) {
+  if (!name || !email || !phone || !password || !licenseNumber || !location) {
     return res.status(400).json({ error: 'Missing required fields.' });
   }
 
   const pharmacies = readJSON(filePath);
-  const existing = pharmacies.find(d => d.email === email);
+  const existing = pharmacies.find(p => p.email === email);
   if (existing) {
     return res.status(409).json({ error: 'Email already registered.' });
   }
 
   const hashedPassword = await bcrypt.hash(password, saltRounds);
 
-  const newDoctor = {
-    id: Date.now(),
+  const maxId = pharmacies.length > 0 ? Math.max(...pharmacies.map(h => h.id)) : 0;
+
+
+  const newPharmacy = {
+    id: maxId + 1,
     name,
     email,
-    password: hashedPassword,
+    phone,    
     licenseNumber,
-    specialization,
+    password: hashedPassword,
     location,
-    role: 'doctor'
+    role: 'pharmacy'
   };
 
-  pharmacies.push(newDoctor);
+  pharmacies.push(newPharmacy);
   writeJSON(filePath, pharmacies);
 
-  const { password: _, ...responseData } = newDoctor;
+  const { password: _, ...responseData } = newPharmacy;
   res.status(201).json(responseData);
 });
 

@@ -1,5 +1,21 @@
 /* Lifeline Home Page Styles */
 
+
+<!-- Vue Router Navigation -->
+    <header class="app-header">
+      <h1>Health App</h1>
+      <nav>
+        <router-link to="/login">Login</router-link> |
+        <router-link to="/register/patient">Patient</router-link> |
+        <router-link to="/register/doctor">Doctor</router-link> |
+        <router-link to="/register/hospital">Hospital</router-link> |
+        <router-link to="/register/pharmacy">Pharmacy</router-link> |
+        <router-link to="/dashboard">Admin</router-link>
+      </nav>
+    </header>
+
+
+    
 <!DOCTYPE html>
 <html lang="en">
 <head>
