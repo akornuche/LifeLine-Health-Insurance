@@ -3,6 +3,9 @@ const cors = require('cors');
 const fs = require('fs');
 const app = express();
 const payment = require('./routes/payment');
+const appointments = require('./routes/appointments');
+const prescriptions = require('./routes/prescriptions');
+
 
 // Middleware
 app.use(cors({
@@ -36,6 +39,9 @@ app.use('/api/hospitals', hospitals);
 app.use('/api/records', records);
 app.use('/api/admin', admin);
 app.use('/api/dependents', dependents);
+app.use('/api/appointments', appointments);
+app.use('/api/prescriptions', prescriptions);
+
 
 app.get('/ping', (req, res) => {
   res.send('Server is alive');

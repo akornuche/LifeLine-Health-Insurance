@@ -1,34 +1,38 @@
 [
   {
     "id": 1,
-    "userId": 1,
     "doctorId": 1,
-    "date": "2025-06-10T10:00:00Z",
-    "status": "confirmed",
-    "notes": "Routine checkup"
+    "patientId": 1,
+    "patientName": "Akor Akazue",
+    "dateTime": "2025-06-20T10:00:00Z",
+    "type": "Consultation",
+    "status": "Pending"
   },
   {
     "id": 2,
-    "userId": 3,
-    "doctorId": 2,
-    "date": "2025-06-15T14:30:00Z",
-    "status": "pending",
-    "notes": "Follow-up"
+    "doctorId": 1,
+    "patientId": 2,
+    "patientName": "Jane Doe",
+    "dateTime": "2025-06-22T14:00:00Z",
+    "type": "Follow-up",
+    "status": "Confirmed"
   },
-  {
+   {
     "id": 3,
-    "userId": 1,
-    "doctorId": 3,
-    "date": "2025-07-01T09:00:00Z",
-    "status": "cancelled",
-    "notes": "Cardiology consult"
+    "doctorId": 1,
+    "patientId": 3,
+    "patientName": "Jane Doe",
+    "dateTime": "2025-06-22T14:00:00Z",
+    "type": "Follow-up",
+    "status": "Confirmed"
   },
-  {
+   {
     "id": 4,
-    "userId": 3,
-    "doctorId": 4,
-    "date": "2025-07-10T11:00:00Z",
-    "status": "confirmed",
-    "notes": "Skin allergy test"
+    "doctorId": 1,
+    "patientId": 4,
+    "patientName": "Jane Doe",
+    "dateTime": "2025-06-22T14:00:00Z",
+    "type": "Follow-up",
+    "status": "Confirmed"
   }
 ]

@@ -44,31 +44,118 @@
           </div>
         </div>
       </section>
+
+      <!-- NEW COMPONENT SECTIONS BELOW -->
+
+      <section class="dashboard-section">
+        <PatientList :patients="patients" @view="handleViewPatient" />
+
+        <!-- Patient Detail Modal or Section -->
+          <div v-if="selectedPatient" id="patient-details-card">
+            <h3>Patient Details</h3>
+            <p><strong>Name:</strong> {{ selectedPatient.name }}</p>
+            <p><strong>Email:</strong> {{ selectedPatient.email }}</p>
+            <p><strong>Gender:</strong> {{ selectedPatient.gender }}</p>
+            <p><strong>Package:</strong> {{ selectedPatient.insurancePackage }}</p>
+            <p><strong>Payment Status:</strong> {{ selectedPatient.paymentStatus }}</p>
+            <p><strong>Expires:</strong> {{ new Date(selectedPatient.paymentExpires).toLocaleDateString() }}</p>
+            <button @click="selectedPatient = null">Close</button>
+          </div>
+      </section>
+
+      <section class="dashboard-section">
+        <AppointmentList
+          :appointments="appointments"
+          @view-details="handleViewAppointment"
+          @reschedule="handleReschedule"
+        />
+      </section>
+
+      <section class="dashboard-section">
+        <PrescriptionList
+          :prescriptions="prescriptions"
+          @view="handleViewPrescription"
+          @fulfill="handleFulfillPrescription"
+        />
+      </section>
     </main>
   </div>
 </template>
 
 <script setup>
 import { ref, onMounted } from 'vue';
+import PatientList from '@/components/PatientList.vue';
+import AppointmentList from '@/components/AppointmentList.vue';
+import PrescriptionList from '@/components/PrescriptionList.vue';
 
 const user = ref(null);
 const profileImage = ref('');
 const patientCount = ref(0);
 const appointments = ref([]);
+const prescriptions = ref([]);
+const patients = ref([]);
 const pendingPrescriptions = ref(0);
+const selectedPrescription = ref(null);
 
 onMounted(async () => {
   const stored = localStorage.getItem('user');
   if (stored) {
     user.value = JSON.parse(stored);
     profileImage.value = user.value.photoUrl || 'https://randomuser.me/api/portraits/men/12.jpg';
-    
-    // Simulated data
-    patientCount.value = 12;
-    appointments.value = [{}, {}, {}];
-    pendingPrescriptions.value = 4;
+
+    try {
+      const resPatients = await fetch('http://localhost:3000/api/patients');
+      const allPatients = await resPatients.json();
+      const doctorPatients = allPatients.filter(p => p.assignedDoctorId === user.value.id);
+      patients.value = doctorPatients;
+      patientCount.value = doctorPatients.length;
+
+      const resAppointments = await fetch('http://localhost:3000/api/appointments');
+      const allAppointments = await resAppointments.json();
+      appointments.value = allAppointments.filter(a => a.doctorId === user.value.id);
+
+      const resPrescriptions = await fetch('http://localhost:3000/api/prescriptions');
+      const allPrescriptions = await resPrescriptions.json();
+      prescriptions.value = allPrescriptions.filter(p => p.doctorId === user.value.id);
+      pendingPrescriptions.value = prescriptions.value.filter(p => p.status === 'Pending').length;
+
+    } catch (err) {
+      console.error('Error fetching data:', err);
+    }
   }
 });
+
+
+const selectedPatient = ref(null);
+
+function handleViewPatient(patient) {
+  selectedPatient.value = patient;
+}
+
+function handleViewAppointment(appointment) {
+  alert(`Viewing appointment with ${appointment.patientName}`);
+}
+
+function handleReschedule(appointment) {
+  alert(`Rescheduling appointment for ${appointment.patientName}`);
+}
+
+function handleViewPrescription(p) {
+  selectedPrescription.value = p;
+  // Show modal or detail panel
+  console.log('Viewing:', p);
+}
+
+function handleFulfillPrescription(prescription) {
+  // Update status locally
+  prescription.status = 'Fulfilled';
+  pendingPrescriptions.value = prescriptions.value.filter(p => p.status === 'Pending').length;
+
+  // TODO: Persist change to backend (optional)
+  console.log(`Prescription ${prescription.id} marked as Fulfilled`);
+}
+
+
 </script>
 
 
@@ -367,6 +454,18 @@ a:hover {
   }
   .panels {
     grid-template-columns: 1fr;
+  }
+  .dashboard-section {
+  margin-top: 2rem;
+  }
+  #patient-details-card {
+    background: #7c7575;
+    padding: 1rem;
+    margin-top: 1rem;
+    border: 2px;
+    border-radius: 0.5rem;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    max-width: 400px;
   }
 }
 </style>

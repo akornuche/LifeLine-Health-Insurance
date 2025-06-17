@@ -10,7 +10,7 @@
       "lat": 6.1329419,
       "lng": 6.7923994
     },
-    "assignedDoctorId": 4,
+    "assignedDoctorId": 1,
     "assignedPharmacyId": 4,
     "assignedHospitalId": 4,
     "role": "patient",
@@ -29,7 +29,7 @@
       "lng": 6.7923994
     },
     "dependents": [],
-    "assignedDoctorId": null,
+    "assignedDoctorId": 1,
     "assignedPharmacyId": null,
     "assignedHospitalId": null,
     "role": "patient",
