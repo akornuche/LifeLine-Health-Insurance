@@ -1,0 +1,13 @@
+[
+{
+  "id": 1,
+  "patientId": 2,
+  "doctorId": 1,
+  "amount": 4500,
+  "service": "Consultation",
+  "providerType": "doctor",
+  "providerId": 4,
+  "date": "2025-06-16T10:30:00.000Z",
+  "status": "unpaid"
+}
+]

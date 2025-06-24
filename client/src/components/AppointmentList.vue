@@ -28,12 +28,12 @@
               </span>
             </td>
             <td class="py-2 px-4">
-              <button
+              <!-- <button
                 @click="$emit('view-details', appointment)"
                 class="text-blue-600 hover:underline text-sm"
               >
                 Details
-              </button>
+              </button> -->
               <button
                 @click="$emit('reschedule', appointment)"
                 class="text-orange-600 hover:underline text-sm ml-2"

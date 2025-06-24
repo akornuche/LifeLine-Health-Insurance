@@ -1,20 +1,6 @@
 <template>
   <div class="container">
-    <aside class="sidebar">
-      <div class="logo">Medical Insurance</div>
-      <div class="user-profile">
-        <img :src="profileImage" alt="Pharmacy Profile" />
-        <h3>{{ user?.name || 'Pharmacist' }}</h3>
-        <p style="color:#6b7280;">Pharmacy Staff</p>
-      </div>
-      <nav>
-        <a href="#" class="active">Dashboard</a>
-        <a href="#">Prescription Orders</a>
-        <a href="#">Inventory</a>
-        <a href="#">Settings</a>
-      </nav>
-    </aside>
-
+    
     <main class="main-content">
       <section class="dashboard">
         <h1>Welcome, {{ user?.name?.split(' ')[0] || 'Pharmacist' }}!</h1>

@@ -18,5 +18,25 @@
     "dosage": "200mg, 2x daily",
     "date": "2025-06-10",
     "status": "Fulfilled"
+  },
+  {
+    "id": 1,
+    "doctorId": 1,
+    "patientId": 1,
+    "patientName": "Akor Akazue",
+    "medication": "Amoxicillin",
+    "dosage": "500mg, 3x daily",
+    "date": "2025-06-15",
+    "status": "Pending"
+  },
+  {
+    "id": 2,
+    "doctorId": 1,
+    "patientId": 2,
+    "patientName": "Jane Doe",
+    "medication": "Ibuprofen",
+    "dosage": "200mg, 2x daily",
+    "date": "2025-06-10",
+    "status": "Pending"
   }
 ]

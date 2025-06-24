@@ -30,6 +30,8 @@ const hospitals = require('./routes/hospitals');
 const records = require('./routes/records');
 const admin = require('./routes/admin');
 const dependents = require('./routes/dependents');
+const costs = require('./routes/costs');
+
 
 app.use('/api/login', login);
 app.use('/api/patients', patients);
@@ -41,6 +43,7 @@ app.use('/api/admin', admin);
 app.use('/api/dependents', dependents);
 app.use('/api/appointments', appointments);
 app.use('/api/prescriptions', prescriptions);
+app.use('/api/costs', costs);
 
 
 app.get('/ping', (req, res) => {

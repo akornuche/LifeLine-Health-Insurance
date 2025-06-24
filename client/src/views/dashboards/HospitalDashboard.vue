@@ -1,21 +1,6 @@
 <template>
   <div class="container">
-    <aside class="sidebar">
-      <div class="logo">Medical Insurance</div>
-      <div class="user-profile">
-        <img :src="profileImage" alt="Hospital Profile" />
-        <h3>{{ user?.name || 'Hospital' }}</h3>
-        <p style="color:#6b7280;">Hospital Staff</p>
-      </div>
-      <nav>
-        <a href="#" class="active">Dashboard</a>
-        <a href="#">Patient Admissions</a>
-        <a href="#">Medical Records</a>
-        <a href="#">Appointments</a>
-        <a href="#">Settings</a>
-      </nav>
-    </aside>
-
+    
     <main class="main-content">
       <section class="dashboard">
         <h1>Welcome, {{ user?.name?.split(' ')[0] || 'Hospital Admin' }}!</h1>

@@ -1,24 +1,6 @@
 <template>
   <div class="container">
-    <aside class="sidebar" aria-label="Sidebar Navigation">
-      <div class="logo" tabindex="0">Medical Insurance</div>
-      <div class="user-profile" tabindex="0">
-        <img
-          :src="profileImage"
-          alt="Patient Profile Picture"
-        />
-        <h3>{{ user?.name || 'Patient' }}</h3>
-        <p style="color:#6b7280;">{{ paymentStatus === 'paid' ? 'Active' : 'Inactive' }}</p>
-      </div>
-      <nav>
-        <a href="#" class="active" aria-current="page">Dashboard</a>
-        <router-link to="/dashboard/patient/upgrade-cover">Upgrade Insurance</router-link>
-        <router-link to="/dashboard/patient/dependents">Dependents</router-link>
-        <a href="#">Doctors</a>
-        <a href="#">Settings</a>
-      </nav>
-    </aside>
-
+    
     <main class="main-content">
       <section class="dashboard" aria-label="Patient Dashboard Overview">
         <h1>Welcome back, {{ user?.name?.split(' ')[0] || 'Patient' }}!</h1>
@@ -88,7 +70,32 @@
           </section>
         </div>
       </section>
+      <section>
+  <h2>Current Month's Charges</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Service</th>
+        <th>Amount</th>
+        <th>Date</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr v-for="cost in monthlyCharges" :key="cost.id">
+        <td>{{ cost.service }}</td>
+        <td>₦{{ cost.amount.toLocaleString() }}</td>
+        <td>{{ new Date(cost.date).toLocaleDateString() }}</td>
+        <td :class="{ unpaid: cost.status === 'unpaid', paid: cost.status === 'paid' }">
+          {{ cost.status }}
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
     </main>
+    
   </div>
 </template>
 
@@ -99,8 +106,13 @@ import axios from 'axios';
 
 const user = ref(null);
 const profileImage = ref('');
+const paymentStatus = ref('Unpaid');
 const dependentCount = ref(0);
-const paymentStatus = ref('Unknown');
+
+const patientCosts = ref([]);
+const recentCharges = ref([]);
+const unpaidCosts = ref([]);
+const totalUnpaidAmount = ref(0);
 
 const dropdownOpen = ref(false);
 
@@ -116,34 +128,44 @@ function closeDropdownOnClickOutside(event) {
 }
 
 onMounted(async () => {
-  // Load user from localStorage
   const storedUser = localStorage.getItem('user');
   if (storedUser) {
     user.value = JSON.parse(storedUser);
     paymentStatus.value = user.value.paymentStatus || 'Unpaid';
 
-    // Set profile image
-    if (user.value.photoUrl) {
-      profileImage.value = user.value.photoUrl;
-    } else {
-      const gender = user.value.gender?.toLowerCase();
-      profileImage.value = gender === 'female'
+    // Profile image fallback
+    const gender = user.value.gender?.toLowerCase();
+    profileImage.value = user.value.photoUrl ||
+      (gender === 'female'
         ? 'https://randomuser.me/api/portraits/women/44.jpg'
         : gender === 'male'
         ? 'https://randomuser.me/api/portraits/men/44.jpg'
-        : 'https://randomuser.me/api/portraits/lego/1.jpg';
-    }
+        : 'https://randomuser.me/api/portraits/lego/1.jpg');
 
     // Fetch dependents
     try {
-      const response = await axios.get(`http://localhost:3000/api/dependents?patientId=${user.value.id}`);
-      dependentCount.value = response.data.length;
+      const res = await axios.get(`http://localhost:3000/api/dependents?patientId=${user.value.id}`);
+      dependentCount.value = res.data.length;
     } catch (error) {
       console.error('Error fetching dependents:', error);
     }
+
+    // Fetch current month's costs only
+    try {
+      const costRes = await axios.get('http://localhost:3000/api/costs/monthly');
+      const allCosts = costRes.data;
+
+      // Filter costs for this patient
+      const myCosts = allCosts.filter(c => c.patientId === user.value.id);
+
+      recentCharges.value = myCosts;
+      unpaidCosts.value = myCosts.filter(c => c.status === 'unpaid');
+      totalUnpaidAmount.value = unpaidCosts.value.reduce((sum, c) => sum + c.amount, 0);
+    } catch (error) {
+      console.error('Error fetching patient costs:', error);
+    }
   }
 
-  // Close dropdown on outside click
   window.addEventListener('click', closeDropdownOnClickOutside);
 });
 
@@ -151,6 +173,7 @@ onBeforeUnmount(() => {
   window.removeEventListener('click', closeDropdownOnClickOutside);
 });
 </script>
+
 
 
 <style scoped>

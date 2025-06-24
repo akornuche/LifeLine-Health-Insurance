@@ -1,21 +1,6 @@
 <template>
   <div class="container">
-    <aside class="sidebar">
-      <div class="logo">Medical Insurance</div>
-      <div class="user-profile">
-        <img :src="profileImage" alt="Doctor Profile" />
-        <h3>{{ user?.name || 'Doctor' }}</h3>
-        <p style="color:#6b7280;">Medical Personnel</p>
-      </div>
-      <nav>
-        <a href="#" class="active">Dashboard</a>
-        <a href="#">My Patients</a>
-        <a href="#">Appointments</a>
-        <a href="#">Prescriptions</a>
-        <a href="#">Settings</a>
-      </nav>
-    </aside>
-
+   
     <main class="main-content">
       <section class="dashboard">
         <h1>Welcome back, Dr. {{ user?.name?.split(' ')[0] || 'Doctor' }}!</h1>
@@ -61,7 +46,7 @@
             <p><strong>Expires:</strong> {{ new Date(selectedPatient.paymentExpires).toLocaleDateString() }}</p>
             <button @click="selectedPatient = null">Close</button>
           </div>
-      </section>
+      </section> <br>
 
       <section class="dashboard-section">
         <AppointmentList
@@ -69,7 +54,7 @@
           @view-details="handleViewAppointment"
           @reschedule="handleReschedule"
         />
-      </section>
+      </section> <br>
 
       <section class="dashboard-section">
         <PrescriptionList
@@ -77,7 +62,41 @@
           @view="handleViewPrescription"
           @fulfill="handleFulfillPrescription"
         />
+      </section><br>
+      <section>
+        <h2>Services Billed This Month</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Patient</th>
+              <th>Service</th>
+              <th>Amount</th>
+              <th>Date</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="cost in doctorCosts" :key="cost.id">
+              <td>{{ cost.patientName || 'Patient #' + cost.patientId }}</td>
+              <td>{{ cost.service }}</td>
+              <td>₦{{ cost.amount.toLocaleString() }}</td>
+              <td>{{ new Date(cost.date).toLocaleDateString() }}</td>
+              <td :class="{ unpaid: cost.status === 'unpaid', paid: cost.status === 'paid' }">
+                {{ cost.status }}
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </section>
+
+      <section class="stat-card">
+        <div class="icon">₦</div>
+        <div class="details">
+          <div class="number">₦{{ totalDoctorBilled.toLocaleString() }}</div>
+          <div class="label">Total Services Billed (This Month)</div>
+        </div>
+      </section>
+
     </main>
   </div>
 </template>
@@ -96,6 +115,8 @@ const prescriptions = ref([]);
 const patients = ref([]);
 const pendingPrescriptions = ref(0);
 const selectedPrescription = ref(null);
+const doctorCosts = ref([]);
+const totalDoctorBilled = ref(0);
 
 onMounted(async () => {
   const stored = localStorage.getItem('user');
@@ -103,28 +124,37 @@ onMounted(async () => {
     user.value = JSON.parse(stored);
     profileImage.value = user.value.photoUrl || 'https://randomuser.me/api/portraits/men/12.jpg';
 
+    const doctorId = user.value.id;
+
     try {
+      // Fetch and filter patients
       const resPatients = await fetch('http://localhost:3000/api/patients');
       const allPatients = await resPatients.json();
-      const doctorPatients = allPatients.filter(p => p.assignedDoctorId === user.value.id);
-      patients.value = doctorPatients;
-      patientCount.value = doctorPatients.length;
+      patients.value = allPatients.filter(p => p.assignedDoctorId === doctorId).slice(-5); // last 5
 
+      // Fetch and filter appointments
       const resAppointments = await fetch('http://localhost:3000/api/appointments');
       const allAppointments = await resAppointments.json();
-      appointments.value = allAppointments.filter(a => a.doctorId === user.value.id);
+      appointments.value = allAppointments.filter(a => a.doctorId === doctorId && a.status !== 'Fulfilled');
 
+      // Fetch and filter prescriptions
       const resPrescriptions = await fetch('http://localhost:3000/api/prescriptions');
       const allPrescriptions = await resPrescriptions.json();
-      prescriptions.value = allPrescriptions.filter(p => p.doctorId === user.value.id);
+      prescriptions.value = allPrescriptions.filter(p => p.doctorId === doctorId && p.status !== 'Fulfilled');
       pendingPrescriptions.value = prescriptions.value.filter(p => p.status === 'Pending').length;
+
+      // ✅ Fetch this month's cost records for the doctor
+      const resCosts = await fetch(`http://localhost:3000/api/costs/monthly?providerId=${doctorId}&providerType=doctor`);
+      const costRecords = await resCosts.json();
+
+      doctorCosts.value = costRecords;
+      totalDoctorBilled.value = costRecords.reduce((sum, c) => sum + (c.amount || 0), 0);
 
     } catch (err) {
       console.error('Error fetching data:', err);
     }
   }
 });
-
 
 const selectedPatient = ref(null);
 
@@ -146,22 +176,30 @@ function handleViewPrescription(p) {
   console.log('Viewing:', p);
 }
 
-function handleFulfillPrescription(prescription) {
-  // Update status locally
-  prescription.status = 'Fulfilled';
-  pendingPrescriptions.value = prescriptions.value.filter(p => p.status === 'Pending').length;
+async function handleFulfillPrescription(prescription) {
+  try {
+    const res = await fetch(`http://localhost:3000/api/prescriptions/${prescription.id}`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ status: 'Fulfilled' }),
+    });
 
-  // TODO: Persist change to backend (optional)
-  console.log(`Prescription ${prescription.id} marked as Fulfilled`);
+    if (!res.ok) throw new Error('Failed to update prescription');
+
+    const updated = await res.json();
+    prescription.status = updated.prescription.status;
+    pendingPrescriptions.value = prescriptions.value.filter(p => p.status === 'Pending').length;
+  } catch (err) {
+    console.error('Error fulfilling prescription:', err);
+  }
 }
-
 
 </script>
 
 
 
 <style scoped>
-/* Reset & base */
+/* Base & Reset */
 * {
   box-sizing: border-box;
 }
@@ -169,10 +207,10 @@ body {
   margin: 0;
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   background: #f4f7fc;
-  color: #333;
+  color: #374151;
 }
 a {
-  color: #2a7ae2;
+  color: #2563eb;
   text-decoration: none;
 }
 a:hover {
@@ -183,7 +221,9 @@ a:hover {
 .container {
   display: flex;
   min-height: 100vh;
+  background-color: #f9fafb;
 }
+
 /* Sidebar */
 .sidebar {
   width: 260px;
@@ -191,18 +231,19 @@ a:hover {
   color: #e5e7eb;
   display: flex;
   flex-direction: column;
+  box-shadow: 2px 0 6px rgba(0, 0, 0, 0.05);
 }
 .sidebar .logo {
   padding: 20px;
   font-weight: bold;
-  font-size: 1.4rem;
+  font-size: 1.5rem;
   text-align: center;
   border-bottom: 1px solid #374151;
 }
 .sidebar .user-profile {
   padding: 20px;
-  border-bottom: 1px solid #374151;
   text-align: center;
+  border-bottom: 1px solid #374151;
 }
 .sidebar .user-profile img {
   width: 80px;
@@ -226,111 +267,48 @@ a:hover {
   font-weight: 600;
   color: #9ca3af;
   border-left: 4px solid transparent;
-  transition: background-color 0.2s, border-color 0.2s, color 0.2s;
+  transition: all 0.2s ease;
 }
 .sidebar nav a.active,
 .sidebar nav a:hover {
   background-color: #374151;
   border-left-color: #3b82f6;
-  color: #fff;
+  color: #ffffff;
 }
 
-/* Main content */
+/* Main Content */
 .main-content {
   flex-grow: 1;
-  display: flex;
-  flex-direction: column;
-}
-/* Topbar */
-.topbar {
-  background: white;
-  padding: 10px 20px;
-  border-bottom: 1px solid #e5e7eb;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-.topbar .menu-toggle {
-  font-size: 1.4rem;
-  cursor: pointer;
-  color: #374151;
-  display: none; /* For responsiveness if you want */
-}
-.topbar .profile-dropdown {
-  position: relative;
-  user-select: none;
-}
-.topbar .profile-btn {
-  background: none;
-  border: none;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  font-weight: 600;
-  color: #374151;
-}
-.topbar .profile-btn img {
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  margin-right: 10px;
-  object-fit: cover;
-  border: 2px solid #3b82f6;
-}
-.topbar .dropdown-menu {
-  position: absolute;
-  right: 0;
-  top: 48px;
-  background: white;
-  box-shadow: 0 2px 8px rgb(0 0 0 / 0.15);
-  border-radius: 6px;
-  overflow: hidden;
-  display: none;
-  min-width: 140px;
-  z-index: 10;
-}
-.topbar .dropdown-menu a {
-  display: block;
-  padding: 10px 15px;
-  color: #374151;
-  font-weight: 500;
-}
-.topbar .dropdown-menu a:hover {
-  background-color: #e0e7ff;
-  color: #1e40af;
-}
-.topbar .profile-dropdown.open .dropdown-menu {
-  display: block;
+  padding: 30px;
+  overflow-y: auto;
 }
 
-/* Dashboard content */
-.dashboard {
-  padding: 25px 30px;
-  overflow-y: auto;
-  flex-grow: 1;
-}
+/* Dashboard */
 .dashboard h1 {
-  margin-top: 0;
-  margin-bottom: 25px;
+  margin: 0 0 25px 0;
   font-weight: 700;
   font-size: 2rem;
   color: #1e293b;
 }
 
-/* Stats cards */
+/* Stats Grid */
 .stats-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   gap: 20px;
   margin-bottom: 30px;
 }
 .stat-card {
   background: white;
-  border-radius: 8px;
+  border-radius: 12px;
   padding: 20px;
-  box-shadow: 0 1px 5px rgb(0 0 0 / 0.1);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
   display: flex;
   align-items: center;
+  transition: transform 0.2s ease;
+}
+.stat-card:hover {
+  transform: translateY(-2px);
 }
 .stat-card .icon {
   background-color: #3b82f6;
@@ -343,19 +321,14 @@ a:hover {
   align-items: center;
   font-size: 1.8rem;
   margin-right: 15px;
-  flex-shrink: 0;
-}
-.stat-card .details {
-  flex-grow: 1;
 }
 .stat-card .details .number {
-  font-size: 1.5rem;
-  font-weight: 700;
-  margin-bottom: 5px;
+  font-size: 1.6rem;
+  font-weight: bold;
   color: #1e293b;
 }
 .stat-card .details .label {
-  font-weight: 600;
+  font-size: 0.9rem;
   color: #6b7280;
 }
 
@@ -368,46 +341,31 @@ a:hover {
 }
 .panel {
   background: white;
-  border-radius: 8px;
-  box-shadow: 0 1px 6px rgb(0 0 0 / 0.12);
+  border-radius: 10px;
+  box-shadow: 0 1px 8px rgba(0, 0, 0, 0.06);
   padding: 20px;
-  display: flex;
-  flex-direction: column;
 }
 .panel h2 {
-  margin-top: 0;
-  margin-bottom: 15px;
-  font-weight: 700;
-  font-size: 1.3rem;
+  margin-bottom: 16px;
+  font-size: 1.2rem;
+  font-weight: 600;
   color: #111827;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-.panel h2 .date {
-  font-weight: 400;
-  font-size: 0.9rem;
-  color: #6b7280;
 }
 .panel ul {
   list-style: none;
-  padding-left: 0;
+  padding: 0;
   margin: 0;
-  flex-grow: 1;
-  overflow-y: auto;
 }
 .panel ul li {
   padding: 12px 0;
   border-bottom: 1px solid #e5e7eb;
+  display: flex;
+  justify-content: space-between;
 }
 .panel ul li:last-child {
   border-bottom: none;
 }
-.panel ul li strong {
-  color: #2563eb;
-}
 .panel .btn-more {
-  align-self: center;
   margin-top: 15px;
   padding: 8px 20px;
   font-size: 0.9rem;
@@ -438,6 +396,7 @@ a:hover {
   }
   .sidebar nav {
     display: flex;
+    justify-content: space-around;
     padding: 0;
   }
   .sidebar nav a {
@@ -455,17 +414,16 @@ a:hover {
   .panels {
     grid-template-columns: 1fr;
   }
-  .dashboard-section {
-  margin-top: 2rem;
-  }
-  #patient-details-card {
-    background: #7c7575;
-    padding: 1rem;
-    margin-top: 1rem;
-    border: 2px;
-    border-radius: 0.5rem;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
-    max-width: 400px;
-  }
+}
+
+/* Patient Details Card */
+#patient-details-card {
+  background: #ffffff;
+  padding: 1rem;
+  margin-top: 1rem;
+  border-radius: 8px;
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.08);
+  max-width: 480px;
+  transition: all 0.2s ease;
 }
 </style>
